@@ -28,10 +28,21 @@ export const Home = () => {
             console.error("Erro ao buscar os pokémons: ", error);
         }
     }
-
+    const pokemonFilter = (name) => {
+        var filteredPokemons = [];
+        if (name === "") {
+            getpokemons();
+        }
+        for (var i in pokemons) {
+            if (pokemons[i].data.name.includes(name)) {
+                filteredPokemons.push(pokemons[i]);
+            }
+        }
+        setPokemons(filteredPokemons);
+    }
     return (
         <div>
-            <Navbar />
+            <Navbar pokemonFilter={pokemonFilter} />
             <Container maxWidth="false" sx={{ bgcolor: "#d2e0e5", padding: "1em" }}>
                 <Grid container spacing={3}>
                     {pokemons.lenght === 0 ? (<Skeletons />
