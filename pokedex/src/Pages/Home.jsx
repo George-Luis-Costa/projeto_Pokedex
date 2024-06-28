@@ -30,7 +30,7 @@ export const Home = () => {
                 <Grid container>
                     {pokemons.map((pokemon, key) => (
                         <Grid item xs={3} key={key}>
-                            <PokemonCard />
+                            <PokemonCard name={pokemon.name} />
                         </Grid>
                     ))}
                 </Grid>
