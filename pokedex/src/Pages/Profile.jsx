@@ -5,7 +5,7 @@ import { Container } from '@mui/material'
 export const Profile = ({ pokemonData }) => {
     return (
         <>
-            <Container>
+            <Container maxWidth="md">
                 <NavBar hideSearch />
                 *Profile*
             </Container>
