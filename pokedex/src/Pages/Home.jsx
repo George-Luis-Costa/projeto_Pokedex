@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../Components/NavBar";
+import Skeletons from "../Components/Skeletons";
 import PokemonCard from "../Components/PokemonCard";
 import { Container, Grid } from "@mui/material";
 import axios from "axios";
 
 export const Home = () => {
-
     const [pokemons, setPokemons] = useState([]);
     var limit = 50;
 
@@ -23,32 +23,25 @@ export const Home = () => {
             // console.log(endpoints);
             // Realizando uma sequencia de requisições para cada endpoint especifico de pokemons
             var response = await axios.all(endpoints.map((endpoint) => axios.get(endpoint)))
-                .then((res) => { setPokemons(res); console.log(res) })
+                .then((res) => setPokemons(res))
         } catch (error) {
             console.error("Erro ao buscar os pokémons: ", error);
         }
     }
 
-    
-    // axios
-    //     .get("https://pokeapi.co/api/v2/pokemon?limit=50")
-    //     .then((res) => {
-    //         setPokemons(res.data.results)
-    //         console.log(res)
-    //     })
-    //     .catch((err) => console.log(err));
-
-
     return (
         <div>
             <Navbar />
-            <Container maxWidth="false">
+            <Container maxWidth="false" sx={{ bgcolor: "#d2e0e5", padding: "1em" }}>
                 <Grid container spacing={3}>
-                    {pokemons.map((pokemon, key) => (
-                        <Grid item xs={2} key={key}>
-                            <PokemonCard name={pokemon.data.name} image={pokemon.data.sprites.front_default} />
-                        </Grid>
-                    ))}
+                    {pokemons.lenght === 0 ? (<Skeletons />
+                    ) : (
+                        pokemons.map((pokemon, key) => (
+                            <Grid item xs={12} sm={6} md={4} lg={2} key={key}>
+                                <PokemonCard name={pokemon.data.name} image={pokemon.data.sprites.front_default} types={pokemon.data.types} />
+                            </Grid>
+                        ))
+                    )}
                 </Grid>
             </Container>
         </div >
