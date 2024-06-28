@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -51,22 +52,28 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
 }));
 
-export default function NavBar({pokemonFilter}) {
+export default function NavBar({ pokemonFilter, hideSearch }) {
+
+    const navigate = useNavigate();
     return (
         <Box sx={{ flexGrow: 1, marginBottom: "1em" }}>
             <AppBar position="static" sx={{ bgcolor: "black" }}>
                 <Toolbar>
                     <Box display="flex" justifyContent="space-between" width="100%">
-                        <Box component="img" src="/assets/Pokémon.png" height="3em" />
-                        <Search onChange={(e) => pokemonFilter(e.target.value)}>
-                            <SearchIconWrapper>
-                                <SearchIcon />
-                            </SearchIconWrapper>
-                            <StyledInputBase
-                                placeholder="Search…"
-                                inputProps={{ 'aria-label': 'search' }}
-                            />
-                        </Search>
+                        <Box component="img" src="/assets/Pokémon.png" height="3em" sx={{ cursor: "pointer" }} onClick={() => navigate("/")} />
+                        {!hideSearch && (
+                            <Search onChange={(e) => pokemonFilter(e.target.value)}>
+                                <SearchIconWrapper>
+                                    <SearchIcon />
+                                </SearchIconWrapper>
+                                <StyledInputBase
+                                    placeholder="Search…"
+                                    inputProps={{ 'aria-label': 'search' }}
+                                />
+                            </Search>
+                        )}
+
+
                     </Box>
                 </Toolbar>
             </AppBar>

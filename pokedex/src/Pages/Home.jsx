@@ -2,19 +2,21 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../Components/NavBar";
 import Skeletons from "../Components/Skeletons";
 import PokemonCard from "../Components/PokemonCard";
-import { Container, Grid } from "@mui/material";
+import { Box, Container, Grid } from "@mui/material";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-export const Home = () => {
+export const Home = ({ setPokemonData }) => {
     const [pokemons, setPokemons] = useState([]);
     var limit = 50;
+    const navigate = useNavigate();
 
     useEffect(() => {
         getpokemons();
     }, []);
 
     // Realizando a requisição da API (axios)
-    const getpokemons = async () => {
+    const getpokemons = () => {
         try {
             var endpoints = [];
             for (var i = 1; i < limit; i++) {
@@ -22,7 +24,7 @@ export const Home = () => {
             }
             // console.log(endpoints);
             // Realizando uma sequencia de requisições para cada endpoint especifico de pokemons
-            var response = await axios.all(endpoints.map((endpoint) => axios.get(endpoint)))
+            var response = axios.all(endpoints.map((endpoint) => axios.get(endpoint)))
                 .then((res) => setPokemons(res))
         } catch (error) {
             console.error("Erro ao buscar os pokémons: ", error);
@@ -40,6 +42,11 @@ export const Home = () => {
         }
         setPokemons(filteredPokemons);
     }
+    const pokemonPickHandler = (pokemonData) => {
+        setPokemonData(pokemonData);
+        navigate("/profile");
+    }
+
     return (
         <div>
             <Navbar pokemonFilter={pokemonFilter} />
@@ -49,7 +56,9 @@ export const Home = () => {
                     ) : (
                         pokemons.map((pokemon, key) => (
                             <Grid item xs={12} sm={6} md={4} lg={2} key={key}>
-                                <PokemonCard name={pokemon.data.name} image={pokemon.data.sprites.front_default} types={pokemon.data.types} />
+                                <Box onClick={() => pokemonPickHandler(pokemon.data)}>
+                                    <PokemonCard name={pokemon.data.name} image={pokemon.data.sprites.front_default} types={pokemon.data.types} />
+                                </Box>
                             </Grid>
                         ))
                     )}
